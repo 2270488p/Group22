@@ -6,6 +6,7 @@ public class Administrator
 	String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db22";
 	String dbUsername = "Group22";
 	String dbPassword = "CSCI3170";
+	//mishi
 	
 	void dropTables()
 	{
