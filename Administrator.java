@@ -7,6 +7,7 @@ public class Administrator
 	String dbUsername = "Group22";
 	String dbPassword = "CSCI3170";
 	//mishi
+	//anna
 	
 	void dropTables()
 	{
