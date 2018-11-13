@@ -2,7 +2,6 @@ package Group22;
 
 import java.sql.*;
 
-
 public class Main 
 {
 

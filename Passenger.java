@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 
 
-public class Passenger 
+public class Passenger
 {
 	Connection con  = null;
 	String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db22";
@@ -20,13 +20,30 @@ public class Passenger
 	{
 		int pid, num_passengers, model_year;
 		String model;
-		System.out.println("Please enter your ID."); //!!!the inputs pid and num_passengers are mandatory!!!!!
-		pid = sc.nextInt();
-		System.out.println("Please enter the number of passengers.");
-		num_passengers = sc.nextInt();
-		System.out.println("Please enter the earliest model year.");
-		num_passengers = sc.nextInt();
-		System.out.println("Please enter the vehicle model.");
+		//System.out.println("Please enter your ID."); //!!!the inputs pid and num_passengers are mandatory!!!!!
+
+        do { //ask for input until pid is inserted and is in correct format
+		    System.out.println("Please enter your ID.");
+		    while (!sc.hasNextInt()) {
+		        System.out.println("You must enter a valid integer ID.");
+		        sc.next();
+            }
+            pid = sc.nextInt();
+        } while (pid != null);
+
+        do { //ask for input until num_passengers is inserted and is in correct format
+            System.out.println("Please enter the number of passengers.");
+            while (!sc.hasNextInt()) {
+                System.out.println("You must enter a valid number of passengers.");
+                sc.next();
+            }
+            num_passengers = sc.nextInt();
+        } while (num_passengers != null);
+
+		System.out.println("Please enter the earliest model year (optional). Press enter to skip.");
+        model_year = sc.nextInt();
+		System.out.println("Please enter the vehicle model (optional). Press enter to skip.");
+        model = sc.nextLine();
 		
 		//search for vehicles available (not in unfinished trips)
 		//place request for matching trip	
