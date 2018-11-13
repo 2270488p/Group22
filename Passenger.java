@@ -86,7 +86,7 @@ public class Passenger
         System.out.println("Trip ID, Driver name, Vehicle ID, Vehicle model, Start, End, Fee, Rating");				//print result
         String sql2 = "SELECT T.tripID, D.name, D.vehicleID, D.model, T.start, T.end, T.fee, T.rating "
                 + "FROM Trip T, Driver D "
-                + "WHERE T.passengerID = ? AND T.tripID = ?";
+                + "WHERE T.passengerID = ? AND T.tripID = ? AND T.driverID = D.driverID";
         PreparedStatement stmt2 = con.prepareStatement(sql2);
         stmt2.setInt(1, passengerID);
         stmt2.setInt(2, tripID);
