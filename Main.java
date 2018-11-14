@@ -27,9 +27,15 @@ public class Main
 		{
 			System.out.println(e);
 		}
-		Scanner sc = new Scanner(System.in);
-		int number;
+		
+		checkStatus(con);
 
+		
+	}
+	
+	public static int welcomeMessage(){
+        int number;
+        Scanner sc = new Scanner(System.in);
         do {
             System.out.println("Welcome! Who are you?");
             System.out.println("1. An administrator");
@@ -37,40 +43,119 @@ public class Main
             System.out.println("3. A driver");
             System.out.println("4. None of the above");
             while (!sc.hasNextInt()) {
-                System.out.println("You must enter a number from 1 to 4.");
+                System.out.println("That is not a valid number.");
                 sc.next();
             }
             number = sc.nextInt();
+            if(number < 1 || number > 4){
+                System.out.println("Please enter a number between 1 and 4.");
+            }
         } while (number < 1 || number > 4);
-		
-		if(number == 1){
-			Administrator admin = new Administrator(con);
-			System.out.println("hello administrator");
-			
-		}else if(number == 2){
-			Passenger passenger = new Passenger(con);
-			System.out.println("hello passenger");
-			
-		}else if(number == 3){
-			Driver driver = new Driver(con);
-			System.out.println("hello driver");
-			
-		}else if(number == 4){
-			
-		}
-		
-		
-		// switch(number){
-			// case 1: 
-			// case 2:
-			// case 3:
-			// case 4:
-		// }
 
+        return number;
 
-		//remaining code here
-		
-	}
+    }
+
+    public static void checkStatus(Connection con){
+        int number = welcomeMessage();
+        Scanner sc = new Scanner(System.in);
+
+        if(number == 1){
+            Group22.Administrator admin = new Administrator(con);
+            do {
+                System.out.println("Administrator, what would you like to do?");
+                System.out.println("1. Create tables");
+                System.out.println("2. Delete tables");
+                System.out.println("3. Load data");
+                System.out.println("4. Check data");
+                System.out.println("5. Go back");
+                while (!sc.hasNextInt()) {
+                    System.out.println("That is not a valid number.");
+                    sc.next();
+                }
+                number = sc.nextInt();
+                if(number < 1 || number > 5){
+                    System.out.println("Please enter a number between 1 and 5.");
+                }
+            } while (number < 1 || number > 5);
+
+            if(number == 1){
+                //admin.createTables();
+                System.out.println("tables created");
+            }else if(number == 2){
+                System.out.println("tables deleted");
+            }else if(number == 3){
+                System.out.println("data loaded");
+            }else if(number == 4){
+                System.out.println("data checked");
+            }else{
+                checkStatus(con);
+            }
+
+        }else if(number == 2){
+            Group22.Passenger passenger = new Passenger(con);
+            do {
+                System.out.println("Passenger, what would you like to do?");
+                System.out.println("1. Request a ride");
+                System.out.println("2. Check trip records");
+                System.out.println("3. Rate a trip");
+                System.out.println("4. Go back");
+                while (!sc.hasNextInt()) {
+                    System.out.println("That is not a valid number.");
+                    sc.next();
+                }
+                number = sc.nextInt();
+                if(number < 1 || number > 4){
+                    System.out.println("Please enter a number between 1 and 4.");
+                }
+            } while (number < 1 || number > 4);
+
+            if(number == 1){
+                System.out.println("requesting ride");
+            }else if(number == 2){
+                System.out.println("checking trip records");
+            }else if(number == 3){
+                System.out.println("rating trip");
+            }else{
+                checkStatus(con);
+            }
+
+        }else if(number == 3){
+            Group22.Driver driver = new Driver(con);
+            do {
+                System.out.println("Driver, what would you like to do?");
+                System.out.println("1. Take request");
+                System.out.println("2. Finish a trip");
+                System.out.println("3. Check driver rating");
+                System.out.println("4. Go back");
+                while (!sc.hasNextInt()) {
+                    System.out.println("That is not a valid number.");
+                    sc.next();
+                }
+                number = sc.nextInt();
+                if(number < 1 || number > 4){
+                    System.out.println("Please enter a number between 1 and 4.");
+                }
+            } while (number < 1 || number > 4);
+
+            if(number == 1){
+                System.out.println("taking request");
+            }else if(number == 2){
+                System.out.println("finishing trip");
+            }else if(number == 3){
+                System.out.println("checking rating");
+            }else{
+                checkStatus(con);
+            }
+
+        }else if(number == 4){
+            System.out.println("You must be either an administrator, passenger, ir driver to access this database. Goodbye.");
+        }
+    }
+
+	
+	
+	
 
 }
 
