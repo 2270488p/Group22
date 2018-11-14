@@ -3,7 +3,12 @@ package Group22;
 import java.util.Scanner;
 public class Driver {
 	
-	Scanner sc = new Scanner(System.in);
+	Connection con = null;
+    Scanner sc = new Scanner(System.in);
+
+    public Driver(Connection con){
+        this.con = con;
+    }
 	
 	public void takeRequest() {
 		
