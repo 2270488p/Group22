@@ -45,13 +45,15 @@ public class Main
 		
 		if(number == 1){
 			Administrator admin = new Administrator(con);
-			System.out.println(
+			System.out.println("hello administrator");
 			
 		}else if(number == 2){
 			Passenger passenger = new Passenger(con);
+			System.out.println("hello passenger");
 			
 		}else if(number == 3){
 			Driver driver = new Driver(con);
+			System.out.println("hello driver");
 			
 		}else if(number == 4){
 			
