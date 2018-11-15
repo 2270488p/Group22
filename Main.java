@@ -5,21 +5,6 @@ import java.util.Scanner;
 
 public class Main 
 {
-	//INSERT SOME RECORDS
-	/*String[] sql = new String[5];
-	sql[0] = "INSERT INTO Driver VALUES (14, 'anna', 'bla', 'toyota', 2018, 5)";
-	sql[1] = "INSERT INTO Driver VALUES (15, 'lars', 'bla', 'model', 2018, 7)";
-	sql[2] = "INSERT INTO Passenger VALUES (5, 'passenger')";
-	sql[3] = "INSERT INTO Request VALUES (5, 0, 2018, 'model', 5, 5)";
-	sql[4] = "INSERT INTO Trip VALUES (5, '2018-08-14 11:01:00', '2018-08-14 11:01:11', 15, 14, 5, 5, 1)";
-	Statement stmt = con.createStatement();
-	for(int i = 0; i < 5; i++)
-	{
-		stmt.executeUpdate(sql[i]);
-	}*/
-	
-	
-	
 	static Connection con  = null;
 	static Scanner sc = new Scanner(System.in);
     static int number;
