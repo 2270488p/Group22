@@ -66,7 +66,7 @@ public class Administrator
 					+ "(requestID INTEGER, taken INTEGER, model_year INTEGER, model CHAR(30), passengers INTEGER, passengerID INTEGER NOT NULL, "
 					+ "PRIMARY KEY(requestID), FOREIGN KEY (passengerID) REFERENCES Passenger(passengerID))";
 			sql[3] = "CREATE TABLE Trip "
-					+ "(tripID INTEGER, start CHAR(19), end CHAR(19), fee INTEGER, driverID INTEGER NOT NULL, requestID INTEGER NOT NULL, passengerID INTEGER, rating INTEGER, "
+					+ "(tripID INTEGER, start DATETIME, end DATETIME, fee INTEGER, driverID INTEGER NOT NULL, requestID INTEGER NOT NULL, passengerID INTEGER, rating INTEGER, "
 					+ "PRIMARY KEY(tripID), "
 					+ "UNIQUE(requestID), "
 					+ "FOREIGN KEY(driverID) REFERENCES Driver(driverID), "
