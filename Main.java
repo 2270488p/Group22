@@ -107,7 +107,6 @@ public class Main
             adminMenu(admin);
         }else if(number == 4){
             admin.checkData();
-            System.out.println("data checked");
             adminMenu(admin);
         }else{
             checkStatus();
@@ -148,7 +147,7 @@ public class Main
     
     public static void driverMenu(Driver driver){
         do {
-            System.out.println("Driver, what would you like to do?");
+            System.out.println("\nDriver, what would you like to do?");
             System.out.println("1. Take request");
             System.out.println("2. Finish a trip");
             System.out.println("3. Check driver rating");
@@ -164,10 +163,10 @@ public class Main
         } while (number < 1 || number > 4);
 
         if(number == 1){
-            System.out.println("taking request");
+            driver.takeRequest();
             driverMenu(driver);
         }else if(number == 2){
-            System.out.println("finishing trip");
+            driver.finishTrip();
             driverMenu(driver);
         }else if(number == 3){
             System.out.println("checking rating");

@@ -35,6 +35,7 @@ public class Administrator
 	{
 		try{	
 			String[] sql = new String[4];
+			String[] tables = {"Driver", "Passenger", "Trip", "Request"};
 			sql[0] = "SELECT COUNT(*) FROM Driver";
 			sql[1] = "SELECT COUNT(*) FROM Passenger";
 			sql[2] = "SELECT COUNT(*) FROM Trip";
@@ -45,7 +46,7 @@ public class Administrator
 			{
 				ResultSet rs = stmt.executeQuery(sql[i]);
 				rs.next();
-				System.out.println("Table " + i + ": " + rs.getInt(1));
+				System.out.println(tables[i] + ": " + rs.getInt(1));
 			}
 		}catch (SQLException e){
 			System.out.println(e);
