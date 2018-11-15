@@ -5,10 +5,11 @@ import java.util.Scanner;
 
 public class Main 
 {
-
+	static Connection con  = null;
+	static Scanner sc = new Scanner(System.in);
+    static int number;
 	public static void main(String[] args) 
 	{
-		Connection con  = null;
 		String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db22";
 		String dbUsername = "Group22";
 		String dbPassword = "CSCI3170";
@@ -28,14 +29,12 @@ public class Main
 			System.out.println(e);
 		}
 		
-		checkStatus(con);
+		checkStatus();
 
 		
 	}
 	
 	public static int welcomeMessage(){
-        int number;
-        Scanner sc = new Scanner(System.in);
         do {
             System.out.println("Welcome! Who are you?");
             System.out.println("1. An administrator");
@@ -56,10 +55,8 @@ public class Main
 
     }
 
-    public static void checkStatus(Connection con){
-        int number = welcomeMessage();
-        Scanner sc = new Scanner(System.in);
-
+    public static void checkStatus(){
+        number = welcomeMessage();
         if(number == 1){
             Group22.Administrator admin = new Administrator(con);
             do {
@@ -80,16 +77,19 @@ public class Main
             } while (number < 1 || number > 5);
 
             if(number == 1){
-                //admin.createTables();
+                admin.createTables();
                 System.out.println("tables created");
             }else if(number == 2){
+				admin.dropTables();
                 System.out.println("tables deleted");
             }else if(number == 3){
+				//admin.loadData();
                 System.out.println("data loaded");
             }else if(number == 4){
+				admin.checkData();
                 System.out.println("data checked");
             }else{
-                checkStatus(con);
+                checkStatus();
             }
 
         }else if(number == 2){
@@ -117,7 +117,7 @@ public class Main
             }else if(number == 3){
                 System.out.println("rating trip");
             }else{
-                checkStatus(con);
+                checkStatus();
             }
 
         }else if(number == 3){
@@ -145,7 +145,7 @@ public class Main
             }else if(number == 3){
                 System.out.println("checking rating");
             }else{
-                checkStatus(con);
+                checkStatus();
             }
 
         }else if(number == 4){
