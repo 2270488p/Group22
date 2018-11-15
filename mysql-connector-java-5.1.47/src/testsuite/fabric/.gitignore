@@ -1,0 +1,8 @@
+/BaseFabricTestCase.class
+/SetupFabricTestsuite.class
+/TestAdminCommands.class
+/TestDumpCommands.class
+/TestResultSetParser.class
+/TestShardMapping$TestBug82203RunnableMock.class
+/TestShardMapping.class
+/TestXmlRpcCore.class

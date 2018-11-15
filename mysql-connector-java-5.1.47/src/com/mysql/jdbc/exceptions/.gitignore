@@ -1,0 +1,13 @@
+/DeadlockTimeoutRollbackMarker.class
+/MySQLDataException.class
+/MySQLIntegrityConstraintViolationException.class
+/MySQLInvalidAuthorizationSpecException.class
+/MySQLNonTransientConnectionException.class
+/MySQLNonTransientException.class
+/MySQLQueryInterruptedException.class
+/MySQLStatementCancelledException.class
+/MySQLSyntaxErrorException.class
+/MySQLTimeoutException.class
+/MySQLTransactionRollbackException.class
+/MySQLTransientConnectionException.class
+/MySQLTransientException.class

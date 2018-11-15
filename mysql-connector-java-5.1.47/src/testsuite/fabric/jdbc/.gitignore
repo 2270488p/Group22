@@ -1,0 +1,5 @@
+/TestBasicConnection.class
+/TestFabricMySQLConnectionSharding.class
+/TestHABasics.class
+/TestHashSharding.class
+/TestRegressions.class

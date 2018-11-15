@@ -1,0 +1,17 @@
+/FabricCommunicationException.class
+/FabricConnection.class
+/FabricStateResponse.class
+/HashShardMapping$ReverseShardIndexSorter.class
+/HashShardMapping.class
+/RangeShardMapping$RangeShardIndexSorter.class
+/RangeShardMapping.class
+/Response.class
+/Server.class
+/ServerGroup.class
+/ServerMode.class
+/ServerRole.class
+/ShardIndex.class
+/ShardMapping.class
+/ShardMappingFactory.class
+/ShardTable.class
+/ShardingType.class
