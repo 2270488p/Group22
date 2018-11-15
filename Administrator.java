@@ -89,4 +89,19 @@ public class Administrator
 		//load from path
 	}
 	
+	void getDatabaseMetaData() {
+        try {
+
+            DatabaseMetaData dbmd = con.getMetaData();
+            String[] types = {"TABLE"};
+            ResultSet rs = dbmd.getTables(null, null, "%", types);
+            while (rs.next()) {
+                System.out.println(rs.getString(3));
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+	
 }
