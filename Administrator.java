@@ -89,6 +89,29 @@ public class Administrator
 		//load from path
 	}
 	
+	void loadData(){ //this is a temporary method so we can try out inserting some random rows
+        try{
+            String[] sql = new String[10];
+            sql[0] = "INSERT INTO Driver VALUES (14, 'anna', 'bla', 'toyota', 2018, 5)";
+            sql[1] = "INSERT INTO Driver VALUES (15, 'lars', 'bla', 'bmw', 2018, 7)";
+            sql[2] = "INSERT INTO Passenger VALUES (5, 'Trump')";
+            sql[3] = "INSERT INTO Request VALUES (5, 0, NULL, NULL, 5, 5)";
+            sql[4] = "INSERT INTO Passenger VALUES (6, 'Kanye')";
+            sql[5] = "INSERT INTO Passenger VALUES (7, 'Spiderman')";
+            sql[6] = "INSERT INTO Request VALUES (6, 0, 2018, 'TOYOTA prius', 4, 6)";
+            sql[7] = "INSERT INTO Request VALUES (7, 0, 2018, 'large toyota', 3, 7)";
+            sql[8] = "INSERT INTO Passenger VALUES (8, 'UberLover')";
+            sql[9] = "INSERT INTO Request VALUES (8, 0, 2018, 'bmw', 5, 8)";
+            Statement stmt = con.createStatement();
+            for(int i = 0; i < sql.length; i++)
+            {
+                stmt.executeUpdate(sql[i]);
+            }
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+	
 	void getDatabaseMetaData() {
         try {
 

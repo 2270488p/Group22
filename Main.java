@@ -102,6 +102,7 @@ public class Main
             System.out.println("tables deleted");
             adminMenu(admin);
         }else if(number == 3){
+			admin.loadData();
             System.out.println("data loaded");
             adminMenu(admin);
         }else if(number == 4){
