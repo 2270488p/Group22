@@ -77,6 +77,11 @@ public class Passenger
 			passengerID = sc.nextInt();
 			System.out.println("Please enter the number of passengers.");				//read in number of seats
 			seats = sc.nextInt();
+			if(seats < 1 || seats > 8)
+			{
+				System.out.println("Sorry, only cars with 1 to 8 seats available");
+				return;
+			}
 			System.out.println("Please enter the earliest model year. (Press ENTER to skip)"); 				//read in model_year, in string format instead of integer format, no model_year possible  
 			Scanner charScanner = new Scanner(System.in).useDelimiter("\\n");
 			model_year = "";
