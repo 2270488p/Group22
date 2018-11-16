@@ -60,7 +60,7 @@ public class Administrator
 			String[] sql = new String[4];
 			sql[0] = "CREATE TABLE Driver"
 					+ "(driverID INTEGER, name CHAR(30), vehicleID CHAR(6), model CHAR(30), model_year INTEGER, seats INTEGER, "
-					+ "PRIMARY KEY(driverID))";
+					+ "PRIMARY KEY(driverID), UNIQUE(vehicleID))";
 			sql[1] = "CREATE TABLE Passenger"
 					+ "(passengerID INTEGER, name CHAR(30), PRIMARY KEY(passengerID))";
 			sql[2] = "CREATE TABLE Request"
