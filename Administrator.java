@@ -6,6 +6,8 @@ public class Administrator
 {
 
 	Connection con = null;
+	
+	static boolean tablesCreated = false;				//indicates whether tables are already created or not
 
 	public Administrator(Connection con){
 		this.con = con;
@@ -25,6 +27,7 @@ public class Administrator
 			{
 				stmt.executeUpdate(sql[i]);
 			}
+			tablesCreated = false;
 		}catch (SQLException e){
 			System.out.println(e);
 		}
@@ -57,6 +60,11 @@ public class Administrator
 	void createTables() 
 	{
 		try{		
+			if(tablesCreated == true)
+			{
+				System.out.println("Tables are already created.");
+				return;
+			}
 			System.out.println("Processing...");
 			String[] sql = new String[4];
 			sql[0] = "CREATE TABLE Driver"
@@ -80,6 +88,7 @@ public class Administrator
 				stmt.executeUpdate(sql[i]);
 			}
 			System.out.print("Done! Tables are created!");
+			tablesCreated = true;
 		}catch (SQLException e){
 			System.out.println(e);
 		}
