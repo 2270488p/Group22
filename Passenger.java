@@ -75,6 +75,17 @@ public class Passenger
 			//read in passengers request
 			System.out.println("Please enter your ID.");				//read in passengerID
 			passengerID = sc.nextInt();
+			String openRequest = "SELECT COUNT(*) FROM Request WHERE taken = 0 AND passengerID = ?";				//for untaken requests taken field has value 0
+			PreparedStatement openRequestStmt= con.prepareStatement(openRequest);				//check whether there is another open request by this passenger
+			openRequestStmt.setInt(1, passengerID);
+			ResultSet openRequestRs = openRequestStmt.executeQuery();
+			openRequestRs.next();
+			int numberOpenRequest = openRequestRs.getInt(1);
+			if(numberOpenRequest > 0)				//passenger cannot take place another request if there is still an open one by him
+			{
+				System.out.println("There is still an open Request by you. You cannot place another one.");
+				return;
+			}
 			System.out.println("Please enter the number of passengers.");				//read in number of seats
 			seats = sc.nextInt();
 			if(seats < 1 || seats > 8)				//only 1-8 passengers possible for a request
