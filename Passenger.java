@@ -20,7 +20,13 @@ public class Passenger
 	{
         try
         {		
-			//read in user input
+        	if(Administrator.tablesCreated == false)
+			{
+				System.out.println("Sorry tables aren't created yet. No action possible.");
+				return;
+			}
+        	
+        	//read in user input
 			int passengerID;
 			String start, end;
 			System.out.println("Please enter your ID.");				//read in passengerID
@@ -69,6 +75,12 @@ public class Passenger
 	{
 		try
 		{
+			if(Administrator.tablesCreated == false)
+			{
+				System.out.println("Sorry tables aren't created yet. No action possible.");
+				return;
+			}
+			
 			int passengerID, seats;				//variables for data entered by passenger
 			String model_year, model;
 			
@@ -244,6 +256,12 @@ public class Passenger
 	public void rateTrip() 
 	{
         try {
+        	if(Administrator.tablesCreated == false)
+			{
+				System.out.println("Sorry tables aren't created yet. No action possible.");
+				return;
+			}
+        	
             int passengerID, tripID, rating;                //asking for passengerID, tripID, rating
             System.out.println("Please enter your ID.");
             passengerID = sc.nextInt();
