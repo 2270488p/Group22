@@ -275,6 +275,19 @@ public class Passenger
 				return;
 			}
             
+            String FTsql = "SELECT COUNT(*) FROM Trip WHERE passengerID = ? AND tripID = ? AND end IS NOT NULL";				//FT finished trip
+			PreparedStatement FTstmt = con.prepareStatement(FTsql);
+			FTstmt.setInt(1, passengerID);
+			FTstmt.setInt(2, tripID);
+			ResultSet FTrs = FTstmt.executeQuery();
+			FTrs.next();
+			int FT = FTrs.getInt(1);
+			if(FT == 0) 
+			{
+				System.out.println("There is no finished trip matching your request.");
+				return;
+			}
+            
             String sql1 = "UPDATE Trip "                //update rating
                     + "SET rating = ? "
                     + "WHERE tripID = ? AND passengerID = ?";
