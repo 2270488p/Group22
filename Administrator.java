@@ -57,6 +57,7 @@ public class Administrator
 	void createTables() 
 	{
 		try{		
+			System.out.println("Processing...");
 			String[] sql = new String[4];
 			sql[0] = "CREATE TABLE Driver"
 					+ "(driverID INTEGER, name CHAR(30), vehicleID CHAR(6), model CHAR(30), model_year INTEGER, seats INTEGER, "
@@ -78,6 +79,7 @@ public class Administrator
 			{
 				stmt.executeUpdate(sql[i]);
 			}
+			System.out.print("Done! Tables are created!");
 		}catch (SQLException e){
 			System.out.println(e);
 		}
