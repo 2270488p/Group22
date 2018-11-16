@@ -269,7 +269,12 @@ public class Passenger
             tripID = sc.nextInt();
             System.out.println("Please enter the rating.");
             rating = sc.nextInt();
-
+            if(rating < 1 || rating > 5 ) 
+			{
+				System.out.println("Only ratings from 1-5 possible");
+				return;
+			}
+            
             String sql1 = "UPDATE Trip "                //update rating
                     + "SET rating = ? "
                     + "WHERE tripID = ? AND passengerID = ?";
