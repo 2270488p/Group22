@@ -77,7 +77,7 @@ public class Passenger
 			passengerID = sc.nextInt();
 			System.out.println("Please enter the number of passengers.");				//read in number of seats
 			seats = sc.nextInt();
-			if(seats < 1 || seats > 8)
+			if(seats < 1 || seats > 8)				//only 1-8 passengers possible for a request
 			{
 				System.out.println("Sorry, only cars with 1 to 8 seats available");
 				return;
@@ -89,7 +89,12 @@ public class Passenger
 			if(model_year.equals("")) model_year = null;
 			System.out.println("Please enter the model.(Press ENTER to skip)");				//read in model, no model possible
 			model = "";
-			model += charScanner.nextLine();	
+			model += charScanner.nextLine();
+			if(model.length() > 30)				//model criterion cannot be longer than 30 characters 
+			{
+				System.out.println("Your model criterion is too long. Maximum 30 characters allowed.");
+				return;
+			}
 			if(model.equals("")) model = null;
 			
 			
