@@ -313,6 +313,24 @@ public class Passenger
         }
     }
 	
+	public boolean checkPassengerID(int pid){ 
+        try{
+            String sql = "SELECT PassengerID " +
+                    "FROM Passenger " +
+                    "WHERE PassengerID = ? ";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, pid);
+            ResultSet resset = stmt.executeQuery();
+            if(!resset.next()){
+                return false;
+            }return true;
+        }catch(SQLException e){
+            return false;
+        }
+    }
+	
+	////////////////edit this function, dont forget///////////////////
+	
 	
 	
 }
