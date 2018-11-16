@@ -37,6 +37,11 @@ public class Administrator
 	void checkData() 
 	{
 		try{	
+			if(tablesCreated == false)
+			{
+				System.out.println("No tables created yet. You cannot check the data.");
+				return;
+			}
 			String[] sql = new String[4];
 			String[] tables = {"Driver", "Passenger", "Trip", "Request"};
 			sql[0] = "SELECT COUNT(*) FROM Driver";
