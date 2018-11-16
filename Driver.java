@@ -2,6 +2,8 @@ package Group22;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.sql.*;
 public class Driver {
@@ -16,18 +18,13 @@ public class Driver {
 	public void takeRequest() {
 
         try{
-            int did, rid;
-            do{
-                System.out.println("Please enter your ID.");
-                while (!sc.hasNextInt()) {
-                    System.out.println("That is not a valid driver id. Your driver ID has to be a positive integer.");
-                    sc.next();
-                }
-                did = sc.nextInt();
-                if(did < 1){
-                    System.out.println("That is not a valid driver id. Your driver ID has to be a positive integer.");
-                }
-            } while (did < 1);
+            int rid;
+            int did = askForDriverID();
+
+            if(!checkDriverID(did)){
+                System.out.println("Invalid driver ID.");
+                return;
+            }
 
             if(isInUnfinishedTrip(did)){
                 System.out.println("You have to finish your current trip before taking a new request.");
@@ -43,13 +40,16 @@ public class Driver {
 
             sql[1] = "SELECT R.requestID, P.name, R.passengers " +
                     "FROM Passenger P, Request R, Driver D " +
-                    "WHERE P.passengerID = R.passengerID AND R.taken = 0 AND D.seats >= R.passengers AND (R.model_year IS NULL OR D.model_year >= R.model_year) AND (R.model IS NULL OR R.model LIKE '%" + driverModel + "%')";
-            rs = stmt.executeQuery(sql[1]);
-            rs.next();
+                    "WHERE P.passengerID = R.passengerID AND R.taken = 0 AND D.seats >= R.passengers AND D.driverID = ? AND " +
+                    "(R.model_year IS NULL OR D.model_year >= R.model_year) AND (R.model IS NULL OR R.model LIKE '%" + driverModel + "%')";
+            List<Integer> possibleReqs = new LinkedList<>();
+            PreparedStatement tempstmt = con.prepareStatement(sql[1]);
+            tempstmt.setInt(1, did);
+            ResultSet resset = tempstmt.executeQuery();
             System.out.println("Request ID, Passenger name, Passengers");
-            while(rs.next()){
-                System.out.printf("%d, %s, %d\n", rs.getInt(1), rs.getString(2), rs.getInt(3));
-                rs.next();
+            while(resset.next()){
+                System.out.printf("%d, %s, %d\n", resset.getInt(1), resset.getString(2), resset.getInt(3));
+                possibleReqs.add(resset.getInt(1));
             }
 
             do{
@@ -63,6 +63,19 @@ public class Driver {
                     System.out.println("That is not a valid request id. The request ID has to be a positive integer.");
                 }
             } while (rid < 1);
+            boolean flag = false;
+            for(int i = 0; i < possibleReqs.size(); i++){
+                if(possibleReqs.get(i) == rid){
+                    flag = true;
+                    break;
+                }
+            }
+
+            if(!flag){
+                System.out.println("You picked an invalid request. Please pick a request from the list.");
+                return;
+            }
+
             sql[2] = "SELECT P.name, P.passengerID " +
                     "FROM Passenger P, Request R " +
                     "WHERE P.passengerID = R.passengerID AND R.requestID = ?";
@@ -101,18 +114,13 @@ public class Driver {
 	
 	public void finishTrip() {
         try{
-            int did, tid;
-            do{
-                System.out.println("Please enter your ID.");
-                while (!sc.hasNextInt()) {
-                    System.out.println("That is not a valid driver id. Your driver ID has to be a positive integer.");
-                    sc.next();
-                }
-                did = sc.nextInt();
-                if(did < 1){
-                    System.out.println("That is not a valid driver id. Your driver ID has to be a positive integer.");
-                }
-            } while (did < 1);
+            int did = askForDriverID();
+
+            if(!checkDriverID(did)){
+                System.out.println("Invalid driver ID.");
+                return;
+            }
+
             if(!isInUnfinishedTrip(did)){
                 System.out.println("You have no unfinished trips. Take a request first.");
                 return;
@@ -184,21 +192,44 @@ public class Driver {
         }
 		
 	}
-	
+
 	public void checkDriverRating() {
-		int did;
-		System.out.println("Please enter your ID.");
-		did = sc.nextInt();
-		int count = 0;
-		//query for number of ratings; assign that to count
-		if(count<5) {
-			//driver doesn't have ratings yet
-			System.out.printf("You don't have an average rating yet. You need %s more rating(s).", 5-count);
-		}else {
-			//find last 5 entries of ratings (go by finish time)
-			//find the average of the five
-			//display driver rating rounded to 2 decimal places
-		}
+        try{
+            int did = askForDriverID();
+
+            if(!checkDriverID(did)){
+                System.out.println("Invalid driver ID.");
+                return;
+            }
+
+            int count = 0;
+            int sum = 0;
+            String[] sql = new String [3];
+            sql[0] = "SELECT T.rating " +
+                    "FROM Trip T " +
+                    "WHERE T.driverID = ? AND T.rating != 0 " +
+                    "ORDER BY end DESC ";
+            PreparedStatement stmt = con.prepareStatement(sql[0]);
+            stmt.setInt(1, did);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                sum += rs.getInt(1);
+                System.out.println(rs.getInt(1));
+                count++;
+            }
+
+
+            if(count<5) {
+                System.out.printf("You don't have an average rating yet. You need %s more rating(s).", 5-count);
+            }else {
+                double avg = Math.round(sum * 100.0) / 100.0; //display driver rating rounded to 2 decimal places
+                System.out.println("Average is " + avg);
+            }
+
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+
 	}
 
 	public boolean isInUnfinishedTrip(int did){
@@ -221,6 +252,39 @@ public class Driver {
         }
 
         return false;
+    }
+
+    public int askForDriverID(){
+        int did;
+        do{
+            System.out.println("Please enter your ID.");
+            while (!sc.hasNextInt()) {
+                System.out.println("That is not a valid driver id. Your driver ID has to be a positive integer.");
+                sc.next();
+            }
+            did = sc.nextInt();
+            if(did < 1){
+                System.out.println("That is not a valid driver id. Your driver ID has to be a positive integer.");
+            }
+        } while (did < 1);
+
+        return did;
+    }
+
+    public boolean checkDriverID(int did){
+        try{
+            String sql = "SELECT DriverID " +
+                    "FROM Driver " +
+                    "WHERE DriverID = ? ";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, did);
+            ResultSet resset = stmt.executeQuery();
+            if(!resset.next()){
+                return false;
+            }return true;
+        }catch(SQLException e){
+            return false;
+        }
     }
 	
 	

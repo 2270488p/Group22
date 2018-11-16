@@ -94,16 +94,13 @@ public class Main
 
         if(number == 1){
             admin.createTables();
-            System.out.println("tables created");
             adminMenu(admin);
         }else if(number == 2){
             admin.dropTables();
             //admin.getDatabaseMetaData();
-            System.out.println("tables deleted");
             adminMenu(admin);
         }else if(number == 3){
 			admin.loadData();
-            System.out.println("data loaded");
             adminMenu(admin);
         }else if(number == 4){
             admin.checkData();
@@ -132,13 +129,13 @@ public class Main
         } while (number < 1 || number > 4);
 
         if(number == 1){
-            System.out.println("requesting ride");
+            passenger.requestRide();
             passengerMenu(passenger);
         }else if(number == 2){
-            System.out.println("checking trip records");
+            passenger.checkTripRecords();
             passengerMenu(passenger);
         }else if(number == 3){
-            System.out.println("rating trip");
+            passenger.rateTrip();
             passengerMenu(passenger);
         }else{
             checkStatus();
@@ -169,7 +166,7 @@ public class Main
             driver.finishTrip();
             driverMenu(driver);
         }else if(number == 3){
-            System.out.println("checking rating");
+            driver.checkDriverRating();
             driverMenu(driver);
         }else{
             checkStatus();
