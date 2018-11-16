@@ -15,22 +15,49 @@ public class Passenger
     static int requestID = 0;				//request ID of last created request (negative integers)
 	
 	
-	
-	public void checkTrips() {
-        try{
-            int pid;
-            String start_date, end_date;
-            //date format variable here: (YYYY-MM-DD);
-            System.out.println("Please enter your ID."); //the inputs pid and num_passengers are mandatory!!
-            pid = sc.nextInt();
-            System.out.println("Please enter the start date (YYYY-MM-DD).");
-            start_date = sc.nextLine();
-            System.out.println("Please enter the end date (YYYY-MM-DD).");
-            end_date = sc.nextLine();
-
-            //split start and end
-            //return all trips for passenger between start and end
-        } catch (SQLException e) {
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	public void checkTripRecords() 
+	{
+        try
+        {		
+			//read in user input
+			int passengerID;
+			String start, end;
+			System.out.println("Please enter your ID.");				//read in passengerID
+			passengerID = sc.nextInt();
+			System.out.println("Please enter the start date (YYYY-MM-DD).");				//read in start date
+			start = sc.next();
+			System.out.println("Please enter the end date (YYYY-MM-DD).");				//read in end date
+			end = sc.next();
+		
+			//SQL-Query
+			String sql = "SELECT T.tripID, D.name, D.vehicleID, D.model, T.start, T.end, T.fee, T.rating "
+					+ "FROM Trip T, Driver D "
+					+ "WHERE T.driverID = D.driverID AND passengerID = ? AND start >= ? AND end <= ? "
+					+ "ORDER BY T.start DESC";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setInt(1, passengerID);
+			stmt.setString(2, start);
+			stmt.setString(3, end + " 23:59:59");
+			ResultSet rs = stmt.executeQuery();
+			
+			
+			//print out result
+			if(!rs.isBeforeFirst())				//no matching trips in the requested time period 
+			{
+				System.out.println("No trips during your requested time period.");
+			}
+			else				//passenger has trips in the requested time period, print them to the screen
+			{
+				System.out.println("Trip ID, Driver Name, Vehicle ID, Vehicle Model, Start, End, Fee, Rating");
+				while(rs.next())
+				{
+					System.out.println(rs.getInt(1) + ", " + rs.getString(2) + ", " + rs.getString(3) + ", " + rs.getString(4) + ", " + rs.getString(5) + ", " + rs.getString(6) + ", " + rs.getInt(7) + ", " + rs.getInt(8));
+				}
+			}
+        } 
+        catch (SQLException e) 
+        {
             System.out.println(e);
         }
 
