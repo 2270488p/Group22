@@ -94,14 +94,13 @@ public class Driver {
             stmt3.executeUpdate();
 
             String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-            sql[4] = "INSERT INTO Trip (tripID, start, driverID, requestID, passengerID) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+            sql[4] = "INSERT INTO Trip (tripID, start, driverID, passengerID) " +
+                    "VALUES (?, ?, ?, ?)";
             PreparedStatement stmt4 = con.prepareStatement(sql[4]);
             stmt4.setInt(1, rid);
             stmt4.setString(2, timeStamp);
             stmt4.setInt(3, did);
-            stmt4.setInt(4, rid);
-            stmt4.setInt(5, passengerID);
+            stmt4.setInt(4, passengerID);
             stmt4.executeUpdate();
             int tripID = rid;
             System.out.println("Trip ID, Passenger name, Start");
