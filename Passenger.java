@@ -8,13 +8,15 @@ public class Passenger
     Connection con = null;
     Scanner sc = new Scanner(System.in);
 
-    public Passenger(Connection con){
+    public Passenger(Connection con)
+    {
         this.con = con;
     }
 
     static int requestID = 0;				//request ID of last created request (negative integers)
 	
 	
+    
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public void checkTripRecords() 
 	{
@@ -31,6 +33,11 @@ public class Passenger
 			String start, end;
 			System.out.println("Please enter your ID.");				//read in passengerID
 			passengerID = sc.nextInt();
+			if(checkPassengerID(passengerID) == false)
+			{
+				System.out.println("This is not a valid PassengerID");
+				return;
+			}
 			System.out.println("Please enter the start date (YYYY-MM-DD).");				//read in start date
 			start = sc.next();
 			System.out.println("Please enter the end date (YYYY-MM-DD).");				//read in end date
@@ -70,6 +77,7 @@ public class Passenger
 	}
 	
 	
+	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	public void requestRide() 
 	{
@@ -87,6 +95,11 @@ public class Passenger
 			//read in passengers request
 			System.out.println("Please enter your ID.");				//read in passengerID
 			passengerID = sc.nextInt();
+			if(checkPassengerID(passengerID) == false)
+			{
+				System.out.println("This is not a valid PassengerID");
+				return;
+			}
 			String openRequest = "SELECT COUNT(*) FROM Request WHERE taken = 0 AND passengerID = ?";				//for untaken requests taken field has value 0
 			PreparedStatement openRequestStmt= con.prepareStatement(openRequest);				//check whether there is another open request by this passenger
 			openRequestStmt.setInt(1, passengerID);
@@ -265,6 +278,11 @@ public class Passenger
             int passengerID, tripID, rating;                //asking for passengerID, tripID, rating
             System.out.println("Please enter your ID.");
             passengerID = sc.nextInt();
+            if(checkPassengerID(passengerID) == false)
+			{
+				System.out.println("This is not a valid PassengerID");
+				return;
+			}
             System.out.println("Please enter the trip ID.");
             tripID = sc.nextInt();
             System.out.println("Please enter the rating.");
@@ -313,24 +331,27 @@ public class Passenger
         }
     }
 	
-	public boolean checkPassengerID(int pid){ 
+	
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public boolean checkPassengerID(int pid)				//checks whether a given integer is a valid passengerID or not
+	{ 
         try{
-            String sql = "SELECT PassengerID " +
+            String sql = "SELECT passengerID " +
                     "FROM Passenger " +
-                    "WHERE PassengerID = ? ";
+                    "WHERE passengerID = ? ";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, pid);
-            ResultSet resset = stmt.executeQuery();
-            if(!resset.next()){
-                return false;
-            }return true;
-        }catch(SQLException e){
+            ResultSet rs = stmt.executeQuery();
+            if(!rs.next()) return false;
+            else return true;
+        }
+        catch(SQLException e)
+        {
             return false;
         }
     }
-	
-	////////////////edit this function, dont forget///////////////////
-	
+
 	
 	
 }
