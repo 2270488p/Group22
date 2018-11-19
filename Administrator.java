@@ -13,7 +13,7 @@ public class Administrator
 		this.con = con;
 	}
 	
-	void dropTables()
+	void dropTables()				//drops all tables in case they are created already
 	{
 
 		try{
@@ -34,12 +34,12 @@ public class Administrator
 
 	}
 	
-	void checkData() 
+	void checkData()		//counts the number of data entries in each table and prints the result to the screen
 	{
 		try{	
-			if(tablesCreated == false)
+			if(tablesCreated == false)				//check whether tables are created yet (cannot count number of data entries in each table if tables aren't created yet)
 			{
-				System.out.println("No tables created yet. You cannot check the data.");
+				System.out.println("No tables created yet. You cannot check the data.");				//if tables arent't created print out error message
 				return;
 			}
 			String[] sql = new String[4];
@@ -65,22 +65,22 @@ public class Administrator
 	void createTables() 
 	{
 		try{		
-			if(tablesCreated == true)
+			if(tablesCreated == true)				//checks whether tables are created yet (cannot create tables again if they are already created)
 			{
 				System.out.println("Tables are already created.");
 				return;
 			}
 			System.out.println("Processing...");
 			String[] sql = new String[4];
-			sql[0] = "CREATE TABLE Driver"
+			sql[0] = "CREATE TABLE Driver"				//create Driver table
 					+ "(driverID INTEGER, name CHAR(30), vehicleID CHAR(6), model CHAR(30), model_year INTEGER, seats INTEGER, "
 					+ "PRIMARY KEY(driverID), UNIQUE(vehicleID))";
-			sql[1] = "CREATE TABLE Passenger"
+			sql[1] = "CREATE TABLE Passenger"				//create Passenger table
 					+ "(passengerID INTEGER, name CHAR(30), PRIMARY KEY(passengerID))";
-			sql[2] = "CREATE TABLE Request"
+			sql[2] = "CREATE TABLE Request"				//create Request table
 					+ "(requestID INTEGER, taken INTEGER, model_year INTEGER, model CHAR(30), passengers INTEGER, passengerID INTEGER NOT NULL, "
 					+ "PRIMARY KEY(requestID), FOREIGN KEY (passengerID) REFERENCES Passenger(passengerID))";
-			sql[3] = "CREATE TABLE Trip "
+			sql[3] = "CREATE TABLE Trip "				//create Trip table
 					+ "(tripID INTEGER, start DATETIME, end DATETIME, fee INTEGER, driverID INTEGER NOT NULL, passengerID INTEGER, rating INTEGER, "
 					+ "PRIMARY KEY(tripID), "
 					+ "FOREIGN KEY(driverID) REFERENCES Driver(driverID), "
