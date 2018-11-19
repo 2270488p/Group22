@@ -18,13 +18,13 @@ public class Passenger
 	
     
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	public void checkTripRecords() 
+	public void checkTripRecords()				//prints all finished Trips within a given period of time and a given PassengerID to the screen
 	{
         try
         {		
-        	if(Administrator.tablesCreated == false)
+        	if(Administrator.tablesCreated == false)				//check whether tables are created yet (cannot execute queries if tables aren't created yet)
 			{
-				System.out.println("Sorry tables aren't created yet. No action possible.");
+				System.out.println("Sorry tables aren't created yet. No action possible.");				//if tables aren't created yet print error message
 				return;
 			}
         	
@@ -33,9 +33,9 @@ public class Passenger
 			String start, end;
 			System.out.println("Please enter your ID.");				//read in passengerID
 			passengerID = sc.nextInt();
-			if(checkPassengerID(passengerID) == false)
+			if(checkPassengerID(passengerID) == false)				//check whether given passengerID is valid
 			{
-				System.out.println("This is not a valid PassengerID");
+				System.out.println("This is not a valid PassengerID");				//if passengerID not valid print error message
 				return;
 			}
 			System.out.println("Please enter the start date (YYYY-MM-DD).");				//read in start date
@@ -52,15 +52,15 @@ public class Passenger
 			stmt.setInt(1, passengerID);
 			stmt.setString(2, start);
 			stmt.setString(3, end + " 23:59:59");
-			ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();				//execute SQL-query
 			
 			
 			//print out result
-			if(!rs.isBeforeFirst())				//no matching trips in the requested time period 
+			if(!rs.isBeforeFirst())				//if no matching finished trips in the requested time period 
 			{
-				System.out.println("No trips during your requested time period.");
+				System.out.println("No finished trips during your requested time period.");				//print out error message
 			}
-			else				//passenger has trips in the requested time period, print them to the screen
+			else				//passenger has finished trips in the requested time period, print them to the screen
 			{
 				System.out.println("Trip ID, Driver Name, Vehicle ID, Vehicle Model, Start, End, Fee, Rating");
 				while(rs.next())
@@ -83,9 +83,9 @@ public class Passenger
 	{
 		try
 		{
-			if(Administrator.tablesCreated == false)
+			if(Administrator.tablesCreated == false)				//check whether tables are created yet (cannot execute query if tables aren't created yet)
 			{
-				System.out.println("Sorry tables aren't created yet. No action possible.");
+				System.out.println("Sorry tables aren't created yet. No action possible.");				//if tables aren't created yet print error message
 				return;
 			}
 			
@@ -95,9 +95,9 @@ public class Passenger
 			//read in passengers request
 			System.out.println("Please enter your ID.");				//read in passengerID
 			passengerID = sc.nextInt();
-			if(checkPassengerID(passengerID) == false)
+			if(checkPassengerID(passengerID) == false)				//check if given passengerID is valid
 			{
-				System.out.println("This is not a valid PassengerID");
+				System.out.println("This is not a valid PassengerID");				//if passengerID not valid print out error message
 				return;
 			}
 			String openRequest = "SELECT COUNT(*) FROM Request WHERE taken = 0 AND passengerID = ?";				//for untaken requests taken field has value 0
@@ -108,14 +108,14 @@ public class Passenger
 			int numberOpenRequest = openRequestRs.getInt(1);
 			if(numberOpenRequest > 0)				//passenger cannot take place another request if there is still an open one by him
 			{
-				System.out.println("There is still an open Request by you. You cannot place another one.");
+				System.out.println("There is still an open Request by you. You cannot place another one.");				//print error message
 				return;
 			}
 			System.out.println("Please enter the number of passengers.");				//read in number of seats
 			seats = sc.nextInt();
 			if(seats < 1 || seats > 8)				//only 1-8 passengers possible for a request
 			{
-				System.out.println("Sorry, only cars with 1 to 8 seats available");
+				System.out.println("Sorry, only cars with 1 to 8 seats available");				//print out error message if requested number of seats is not in the range of 1-8
 				return;
 			}
 			System.out.println("Please enter the earliest model year. (Press ENTER to skip)"); 				//read in model_year, in string format instead of integer format, no model_year possible  
@@ -128,7 +128,7 @@ public class Passenger
 			model += charScanner.nextLine();
 			if(model.length() > 30)				//model criterion cannot be longer than 30 characters 
 			{
-				System.out.println("Your model criterion is too long. Maximum 30 characters allowed.");
+				System.out.println("Your model criterion is too long. Maximum 30 characters allowed.");				//print out error message if model criterion too long
 				return;
 			}
 			if(model.equals("")) model = null;
@@ -144,6 +144,8 @@ public class Passenger
 			PreparedStatement stmt;
 			ResultSet rs;
 			
+			
+			//differentiate 4 cases
 			if(model_year == null)
 			{
 				if(model == null)				//no model_year preference, no model preference
@@ -180,17 +182,18 @@ public class Passenger
 			}
 			
 			
-			rs = stmt.executeQuery();
+			rs = stmt.executeQuery();				//execute SQL-query
 			
 			if(!rs.isBeforeFirst())				//empty resultset, no car matching the the passengers request available at the moment
 			{
-				System.out.println("Sorry, no cars available matching your request");
+				System.out.println("Sorry, no cars available matching your request");				//print out error message
 			}
 			else				//cars available matching the passengers request, create a new request and display number of available drivers (including those in unfinished trips)
 			{
 				//calculate the number of available drivers
 				sqlstart = "SELECT COUNT(*) FROM Driver D WHERE seats >= ?";
 			
+				//differentiate between 4 cases
 				if(model_year == null)
 				{
 					if(model == null)				//no model_year preference, no model preference
@@ -225,18 +228,19 @@ public class Passenger
 						stmt.setString(3, modelstring);
 					}
 				}
-				rs = stmt.executeQuery();
+				rs = stmt.executeQuery();				//execute SQL-query
 				rs.next();
-				System.out.println("Your request is placed. " + rs.getInt(1) + " drivers are able to take your request.");
+				System.out.println("Your request is placed. " + rs.getInt(1) + " drivers are able to take your request.");				//print out number of drivers able to take the trip (including those still in unfinished trips)
 				
 				
 				//create new request
-				requestID -= 1;				//decrement requestID
+				requestID -= 1;				//decrement requestID to create new unique requestID for new Request
 				String sql = "INSERT INTO Request VALUES (?, 0, ?, ?, ?, ?)";				//for untaken requests taken field has value 0
 				stmt = con.prepareStatement(sql);
 				stmt.setInt(1, requestID);
 				stmt.setInt(4, seats);
 				stmt.setInt(5, passengerID);
+				//differentiate between 4 cases
 				if(model_year == null)				//no model_year preference
 				{
 					stmt.setNull(2, Types.INTEGER);				//set model_year field NULL
@@ -253,7 +257,7 @@ public class Passenger
 				{
 					stmt.setString(3, model);
 				}
-				stmt.executeUpdate();
+				stmt.executeUpdate();				//execute SQL-query to insert new Request into Request table
 			}
 
 		}
@@ -266,33 +270,34 @@ public class Passenger
 	
 	
 	
-	public void rateTrip() 
+	public void rateTrip()				//a Passenger can rate his/her finished Trips
 	{
         try {
-        	if(Administrator.tablesCreated == false)
+        	if(Administrator.tablesCreated == false)				//check whether tables are created yet (cannot execute queries if tables aren't created yet)
 			{
-				System.out.println("Sorry tables aren't created yet. No action possible.");
+				System.out.println("Sorry tables aren't created yet. No action possible.");				//print out error message if tables aren't created yet
 				return;
 			}
         	
             int passengerID, tripID, rating;                //asking for passengerID, tripID, rating
-            System.out.println("Please enter your ID.");
+            System.out.println("Please enter your ID.");				//read in passengerID
             passengerID = sc.nextInt();
-            if(checkPassengerID(passengerID) == false)
+            if(checkPassengerID(passengerID) == false)				//check whether given passengerID is valid
 			{
-				System.out.println("This is not a valid PassengerID");
+				System.out.println("This is not a valid PassengerID");				//print out error message if not valid
 				return;
 			}
-            System.out.println("Please enter the trip ID.");
+            System.out.println("Please enter the trip ID.");				//read in tripID
             tripID = sc.nextInt();
-            System.out.println("Please enter the rating.");
+            System.out.println("Please enter the rating.");				//read in rating
             rating = sc.nextInt();
-            if(rating < 1 || rating > 5 ) 
+            if(rating < 1 || rating > 5 )				//value of rating must be in range of 1-5
 			{
-				System.out.println("Only ratings from 1-5 possible");
+				System.out.println("Only ratings from 1-5 possible");				//print error if rating value is not within the allowed range
 				return;
 			}
             
+            //check whether there exists a finished Trip with the given passengerID and tripID
             String FTsql = "SELECT COUNT(*) FROM Trip WHERE passengerID = ? AND tripID = ? AND end IS NOT NULL";				//FT finished trip
 			PreparedStatement FTstmt = con.prepareStatement(FTsql);
 			FTstmt.setInt(1, passengerID);
@@ -302,10 +307,11 @@ public class Passenger
 			int FT = FTrs.getInt(1);
 			if(FT == 0) 
 			{
-				System.out.println("There is no finished trip matching your request.");
+				System.out.println("There is no finished trip matching your request.");				//no matching trip found for rating, print error message
 				return;
 			}
             
+			//SQL-query to set the ratin
             String sql1 = "UPDATE Trip "                //update rating
                     + "SET rating = ? "
                     + "WHERE tripID = ? AND passengerID = ?";
@@ -313,7 +319,7 @@ public class Passenger
             stmt1.setInt(1, rating);
             stmt1.setInt(2, tripID);
             stmt1.setInt(3, passengerID);
-            stmt1.executeUpdate();
+            stmt1.executeUpdate();				//execute the query
 
             System.out.println("Trip ID, Driver name, Vehicle ID, Vehicle model, Start, End, Fee, Rating");                //print result
             String sql2 = "SELECT T.tripID, D.name, D.vehicleID, D.model, T.start, T.end, T.fee, T.rating "
@@ -337,14 +343,15 @@ public class Passenger
 	public boolean checkPassengerID(int pid)				//checks whether a given integer is a valid passengerID or not
 	{ 
         try{
+        	//SQL-query
             String sql = "SELECT passengerID " +
                     "FROM Passenger " +
                     "WHERE passengerID = ? ";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, pid);
             ResultSet rs = stmt.executeQuery();
-            if(!rs.next()) return false;
-            else return true;
+            if(!rs.next()) return false;				//if ResultSet rs is empty the given integer is not a valid passenger ID, return false
+            else return true;				//given integer is a valid passengerID, return true
         }
         catch(SQLException e)
         {
