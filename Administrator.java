@@ -1,12 +1,18 @@
 package Group22;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Scanner;
 
 public class Administrator
 {
 
 	Connection con = null;
-	
+	Scanner sc = new Scanner(System.in);
 	static boolean tablesCreated = false;				//indicates whether tables are already created or not
 
 	public Administrator(Connection con){
@@ -97,36 +103,153 @@ public class Administrator
 		}
 		
 	}	
-	
 
-	void loadData(String path)
+	
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	void loadData()
 	{
-		//load from path
+		try 
+		{
+			if(tablesCreated == false)				//checks whether tables are created yet (cannot create tables again if they are already created)
+			{
+				System.out.println("Tables aren't created yet. You cannot insert data.");				//print error message
+				return;
+			}
+			
+			String datapath;				//read in path to datafiles from administrator
+			System.out.println("Please enter path to folder with datafiles.");
+			datapath = sc.next();
+			String drivers = File.separator + "drivers.csv";
+			String passengers = File.separator + "passengers.csv";
+			String trips = File.separator + "trips.csv";
+			String vehicles = File.separator + "vehicles.csv";
+			
+
+		     
+			BufferedReader br = null;
+		    String line = "";
+
+		    br = new BufferedReader(new FileReader(datapath + drivers));				//read in drivers.sv
+		    while ((line = br.readLine()) != null) 
+		    {
+		    	String[] result = line.split(",");				//go through file line by line
+		    	String sql = "INSERT INTO Driver (driverID, name, vehicleID) VALUES (?, ?, ?)";				//insert tuples into Driver table
+		    	PreparedStatement stmt = con.prepareStatement(sql);
+		    	stmt.setInt(1, Integer.parseInt(result[0]));
+		    	stmt.setString(2, result[1]);
+		    	stmt.setString(3, result[2]);
+		    	stmt.executeUpdate();
+		    }	    
+		    
+	        if (br != null) 
+	        {
+	            try 
+	            {
+	                br.close();
+	            } 
+	            catch (IOException e) 
+	            {
+	                e.printStackTrace();
+	            }
+	        }
+	        
+	        br = new BufferedReader(new FileReader(datapath + passengers));				//read in passengers.csv
+		    while ((line = br.readLine()) != null)				//read passengers.csv line by line
+		    {
+		    	String[] result = line.split(",");
+		    	String sql = "INSERT INTO Passenger VALUES (?, ?)";				//insert tuples into Passenger table
+		    	PreparedStatement stmt = con.prepareStatement(sql);
+		    	stmt.setInt(1, Integer.parseInt(result[0]));
+		    	stmt.setString(2, result[1]);
+		    	stmt.executeUpdate();
+		    }
+		    
+		    if (br != null) 
+	        {
+	            try 
+	            {
+	                br.close();
+	            } 
+	            catch (IOException e) 
+	            {
+	                e.printStackTrace();
+	            }
+	        }
+		    
+		    br = new BufferedReader(new FileReader(datapath + vehicles));				//read in vehicles.csv
+		    while ((line = br.readLine()) != null)				//read in file line by line
+		    {
+		    	String[] result = line.split(",");
+		    	String sql = "UPDATE Driver "				//update model, model_year, seats in Driver table for tuple with matching vehicleID
+		    			+ "SET model = ?, model_year = ?, seats = ? "
+		    			+ "WHERE vehicleID = ?";
+		    	PreparedStatement stmt = con.prepareStatement(sql);
+		    	stmt.setString(1, result[1]);
+		    	stmt.setInt(2,Integer.parseInt(result[2]));
+		    	stmt.setInt(3, Integer.parseInt(result[3]));
+		    	stmt.setString(4, result[0]);
+		    	stmt.executeUpdate();
+		    }
+		    
+		    if (br != null) 
+	        {
+	            try 
+	            {
+	                br.close();
+	            } 
+	            catch (IOException e) 
+	            {
+	                e.printStackTrace();
+	            }
+	        }
+		    
+		    br = new BufferedReader(new FileReader(datapath + trips));				//read in trips.csv
+		    while ((line = br.readLine()) != null) 				//read in file line by line
+		    {
+		    	String[] result = line.split(",");
+		    	String sql = "INSERT INTO Trip VALUES (?, ?, ?, ?, ?, ?, ?)";				//insert tuples into Trip table
+		    	PreparedStatement stmt = con.prepareStatement(sql);
+		    	stmt.setInt(1, Integer.parseInt(result[0]));
+		    	stmt.setString(2, result[3]);
+		    	stmt.setString(3, result[4]);
+		    	stmt.setInt(4, Integer.parseInt(result[5]));
+		    	stmt.setInt(5, Integer.parseInt(result[1]));
+		    	stmt.setInt(6, Integer.parseInt(result[2]));
+		    	stmt.setInt(7, Integer.parseInt(result[6]));
+		    	stmt.executeUpdate();
+		    }	    
+		    
+	        if (br != null) 
+	        {
+	            try 
+	            {
+	                br.close();
+	            } 
+	            catch (IOException e) 
+	            {
+	                e.printStackTrace();
+	            }
+	        }
+	
+		}
+		catch (SQLException e)
+		{
+			System.out.println(e);
+		}
+		catch (FileNotFoundException e) 
+		{
+            e.printStackTrace();
+		}
+		catch (IOException e) 
+		{
+            e.printStackTrace();
+        } 
 	}
 	
-	void loadData(){ //this is a temporary method so we can try out inserting some random rows
-        try{
-            String[] sql = new String[10];
-            sql[0] = "INSERT INTO Driver VALUES (14, 'anna', 'bla', 'toyota', 2018, 5)";
-            sql[1] = "INSERT INTO Driver VALUES (15, 'lars', 'bla', 'bmw', 2018, 7)";
-            sql[2] = "INSERT INTO Passenger VALUES (5, 'Trump')";
-            sql[3] = "INSERT INTO Request VALUES (5, 0, NULL, NULL, 5, 5)";
-            sql[4] = "INSERT INTO Passenger VALUES (6, 'Kanye')";
-            sql[5] = "INSERT INTO Passenger VALUES (7, 'Spiderman')";
-            sql[6] = "INSERT INTO Request VALUES (6, 0, 2018, 'TOYOTA prius', 4, 6)";
-            sql[7] = "INSERT INTO Request VALUES (7, 0, 2018, 'large toyota', 3, 7)";
-            sql[8] = "INSERT INTO Passenger VALUES (8, 'UberLover')";
-            sql[9] = "INSERT INTO Request VALUES (8, 0, 2018, 'bmw', 5, 8)";
-            Statement stmt = con.createStatement();
-            for(int i = 0; i < sql.length; i++)
-            {
-                stmt.executeUpdate(sql[i]);
-            }
-        }catch(SQLException e){
-            System.out.println(e);
-        }
-    }
+
 	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void getDatabaseMetaData() {
         try {
 
